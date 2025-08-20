@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+
+
+
 namespace Ejercicio2.Models
 {
     internal class Viaje
@@ -18,8 +23,8 @@ namespace Ejercicio2.Models
         public int HDuracionViaje { get; set; }
         public int MDuracionViaje { get; set; }
 
-
         public int Ocupados = 0;
+
         #region Calcular tiempo de viaje
 
         static int HInicio;
@@ -27,67 +32,62 @@ namespace Ejercicio2.Models
         static int HFin;
         static int MFin;
 
-        
-        
-
-        static TimeSpan InicioViaje = new TimeSpan( HInicio, MInicio, 0);
-        static TimeSpan FinViaje = new TimeSpan( HFin, MFin, 0);
-
-        
-
         public void AsignarTiempos()
         {
-            TimeSpan Duracion = FinViaje-InicioViaje;
-            HDuracionViaje = Duracion.Hours;
-            MDuracionViaje = Duracion.Minutes;
+            TimeSpan inicio = new TimeSpan(HInicio, MInicio, 0);
+            TimeSpan fin = new TimeSpan(HFin, MFin, 0);
+
+            TimeSpan duracion = fin - inicio;
+
+            if (duracion.TotalMinutes < 0)
+                duracion += new TimeSpan(24, 0, 0); // por si el viaje pasa de medianoche
+
+            HDuracionViaje = duracion.Hours;
+            MDuracionViaje = duracion.Minutes;
         }
 
         #endregion
 
-
-        public Viaje(int hInicio,int mInicio, int asientos)
+        public Viaje(int hInicio, int mInicio, int asientos)
         {
             Asientos = asientos;
             HInicio = hInicio;
             MInicio = mInicio;
-            
         }
-        
-        public void RealizarParada(int hLLegadaParada, int mLLegadaParada,int hSalidaParada,int mSalidaParada, int ascienden, int decienden)
+
+        public void RealizarParada(int hLLegadaParada, int mLLegadaParada,
+                                   int hSalidaParada, int mSalidaParada,
+                                   int ascienden, int descienden)
         {
-
-
-
             int llegadaMin = (60 * hLLegadaParada) + mLLegadaParada;
             int salidaMin = (60 * hSalidaParada) + mSalidaParada;
 
             int demoraTotal = salidaMin - llegadaMin;
 
-            
+            if (demoraTotal < 0)
+                demoraTotal += 24 * 60; // por si la parada cruza medianoche
+
             HDemora += demoraTotal / 60;
             MDemora += demoraTotal % 60;
 
-            
+            // Normalizar minutos acumulados
+            if (MDemora >= 60)
+            {
+                HDemora += MDemora / 60;
+                MDemora = MDemora % 60;
+            }
 
             CantParadas++;
-            Transportados+=ascienden;
-
-            Ocupados+= ascienden-decienden;
-
+            Transportados += ascienden;
+            Ocupados += ascienden - descienden;
         }
+
         public void Finalizar(int hLLegada, int mLLegada)
         {
-            HFin= hLLegada;
-            MFin= mLLegada;
+            HFin = hLLegada;
+            MFin = mLLegada;
             AsignarTiempos();
         }
-       
-
-
-
-
-
-
-
     }
 }
+
