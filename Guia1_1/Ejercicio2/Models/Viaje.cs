@@ -39,8 +39,7 @@ namespace Ejercicio2.Models
 
             TimeSpan duracion = fin - inicio;
 
-            if (duracion.TotalMinutes < 0)
-                duracion += new TimeSpan(24, 0, 0); // por si el viaje pasa de medianoche
+            
 
             HDuracionViaje = duracion.Hours;
             MDuracionViaje = duracion.Minutes;
