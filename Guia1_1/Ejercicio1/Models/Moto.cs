@@ -23,8 +23,10 @@ namespace Ejercicio1.Models
         }
         public double CalcularDepreciacionLineal(int añoACalcular, int vidaUtil)
         {
-            //int AñosUsos = Modelo - añoACalcular;
-            double valorActualizado = ValorFabricacion - (ValorFabricacion * (añoACalcular - Modelo) / vidaUtil);
+            int AñosUsos = añoACalcular -Modelo;
+            //alternativa
+            // double valorActualizado = valorFabricacion *añosUsos/vidaUtil
+            double valorActualizado = ValorFabricacion - (ValorFabricacion * (añoACalcular - Modelo) / vidaUtil);//da negativo 
             return valorActualizado;
         }
         public double CalcularDepreciacionAnual(int añoACalcular,double tasaDepreciacion)
