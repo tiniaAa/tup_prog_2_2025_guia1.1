@@ -24,7 +24,7 @@ namespace Ejercicio2.Models
         public int MDuracionViaje { get; set; }
 
         public int Ocupados = 0;
-
+        int demoraEnM;
         #region Calcular tiempo de viaje
 
         static int HInicio;
@@ -59,23 +59,13 @@ namespace Ejercicio2.Models
                                    int hSalidaParada, int mSalidaParada,
                                    int ascienden, int descienden)
         {
-            int llegadaMin = (60 * hLLegadaParada) + mLLegadaParada;
-            int salidaMin = (60 * hSalidaParada) + mSalidaParada;
 
-            int demoraTotal = salidaMin - llegadaMin;
+            int LLegadaEnM = 30 * hLLegadaParada + mLLegadaParada;
+            int SalidaEnM = 30 * hSalidaParada + mSalidaParada;
+            demoraEnM += SalidaEnM - LLegadaEnM;
 
-            if (demoraTotal < 0)
-                demoraTotal += 24 * 60; // por si la parada cruza medianoche
-
-            HDemora += demoraTotal / 60;
-            MDemora += demoraTotal % 60;
-
-            // Normalizar minutos acumulados
-            if (MDemora >= 60)
-            {
-                HDemora += MDemora / 60;
-                MDemora = MDemora % 60;
-            }
+            MDemora = demoraEnM % 60;
+            HDemora= HDemora / 60;
 
             CantParadas++;
             Transportados += ascienden;
